@@ -1,152 +1,91 @@
 Gesture Controlled Smart Assistant
+Overview
 
-An AI-powered system that allows users to control their computer using hand gestures captured through a webcam. The assistant uses computer vision and machine learning techniques to detect gestures in real time and map them to system actions.
+The Gesture Controlled Smart Assistant is a system that allows users to control a computer using hand gestures captured through a webcam. Instead of using traditional input devices like a mouse or keyboard, users can perform gestures that are detected and interpreted by the system in real time.
 
-This project demonstrates how natural human interaction can replace traditional input devices such as a mouse or keyboard.
-
-Demo
-
-Example workflow:
-
-Camera captures hand gestures
-
-Gesture detection model processes frames
-
-Recognized gesture triggers system command
-
-Assistant performs the action
+The project uses computer vision and machine learning techniques to recognize gestures and map them to specific actions. This creates a more natural and contactless way of interacting with computers.
 
 Features
 
 Real-time hand gesture detection
 
-Contactless computer control
+Gesture-based computer control
 
-Modular architecture for easy upgrades
-
-Gesture dataset initialization support
-
-Integration testing included
+Modular and scalable project structure
 
 Lightweight and optimized for real-time performance
 
-System Architecture
-Camera Input
-     │
-     ▼
-Frame Processing (OpenCV)
-     │
-     ▼
-Gesture Recognition Model
-     │
-     ▼
-Gesture Classification
-     │
-     ▼
-Action Mapping Module
-     │
-     ▼
-System Command Execution
+Easy integration with AI assistant modules
 
+How It Works
+
+The webcam captures live video input.
+
+The system processes each frame using computer vision techniques.
+
+A gesture recognition model detects and classifies the hand gesture.
+
+The detected gesture is mapped to a predefined action.
+
+The system executes the corresponding command.
 
 Project Structure
-gesture-controlled-assistant
-│
-├── app.py
-├── seed_gestures.py
-├── test_integration.py
-├── requirements.txt
-├── README.md
-│
-├── database/
-│   └── Gesture dataset storage
-│
-├── models/
-│   └── Gesture recognition models
-│
-├── modules/
-│   └── Core system modules
-│
-└── utils/
-    └── Helper and utility functions
 
-    
+app.py – Main application file
+seed_gestures.py – Initializes or seeds gesture data
+test_integration.py – Used for testing system integration
+requirements.txt – Project dependencies
+
+Folders:
+
+database/ – Stores gesture data
+models/ – Contains machine learning models
+modules/ – Core functional modules of the system
+utils/ – Helper and utility functions
+
 Installation
-Clone the repository:
+
+Step 1: Clone the repository
 
 git clone https://github.com/yourusername/gesture-controlled-assistant.git
 
-Navigate to the project folder:
+Step 2: Navigate to the project folder
+
 cd gesture-controlled-assistant
 
-Install dependencies:
+Step 3: Install the required dependencies
 
 pip install -r requirements.txt
+
 Usage
 
-Run the main application:
+Run the main application using the following command:
 
 python app.py
 
-The system will activate the webcam and start detecting gestures in real time.
+After running the program, the webcam will start and the system will begin detecting gestures in real time.
 
 Technologies Used
 
 Python
-
 OpenCV
-
 NumPy
-
 Machine Learning
-
 Computer Vision
-
-Example Gesture Actions
-Gesture	Action
-Open Palm	Start Assistant
-Closed Fist	Stop Assistant
-Swipe Left	Previous Action
-Swipe Right	Next Action
-Two Fingers	Select Command
-
-(You can modify these gestures in the dataset.)
 
 Future Improvements
 
-Voice + gesture hybrid assistant
+Voice and gesture hybrid assistant
 
-Custom gesture training interface
+Custom gesture training system
 
-Deep learning-based gesture recognition
+Improved deep learning gesture models
 
-Web dashboard for configuration
+Web interface for gesture configuration
 
-IoT device control integration
-
-Contribution
-
-Contributions are welcome.
-
-Fork the repository
-
-Create a new branch
-
-Commit your changes
-
-Submit a pull request
-
-License
-
-This project is open-source and available under the MIT License.
+Integration with smart home or IoT devices
 
 Author
 
-Developed by Srikar
+Srikar
 B V Raju Institute of Technology
-
-✅ After adding this:
-
-git add README.md
-git commit -m "Added professional README"
-git push
