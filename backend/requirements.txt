@@ -1,0 +1,10 @@
+flask
+flask-cors
+opencv-python
+mediapipe
+scikit-learn
+numpy
+pyautogui
+keyboard
+pynput
+pillow

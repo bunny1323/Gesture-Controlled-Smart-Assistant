@@ -1,0 +1,11 @@
+{
+    "test_gesture": "scroll_down",
+    "Open Palm": "play_pause",
+    "Fist": "stop_engine",
+    "volume up": "volume_up",
+    "play or pause": "play_pause",
+    "volume down": "volume_down",
+    "forward": "scroll_up",
+    "scrowl down": "scroll_down",
+    "play/pause": "play_pause"
+}

@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gesture Library | Vision Assistant</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<body>
+    <div class="gradient-bg"></div>
+
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div style="padding: 0 1rem 2rem; border-bottom: 1px solid var(--card-border); margin-bottom: 1.5rem;">
+                <h2 style="font-size: 1.2rem; display: flex; align-items: center; gap: 0.5rem;">
+                    <i data-lucide="eye"></i> Vision
+                </h2>
+            </div>
+
+            <nav style="flex: 1;">
+                <a href="dashboard.html" class="nav-link">
+                    <i data-lucide="layout-dashboard"></i> <span>Dashboard</span>
+                </a>
+                <a href="recognition.html" class="nav-link">
+                    <i data-lucide="camera"></i> <span>Recognition</span>
+                </a>
+                <a href="train.html" class="nav-link">
+                    <i data-lucide="dumbbell"></i> <span>Training</span>
+                </a>
+                <a href="library.html" class="nav-link">
+                    <i data-lucide="library"></i> <span>Library</span>
+                </a>
+                <a href="settings.html" class="nav-link">
+                    <i data-lucide="settings"></i> <span>Settings</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                <div>
+                    <h1>Gesture Library</h1>
+                    <p>Manage your custom gestures and their system actions.</p>
+                </div>
+                <a href="train.html" class="btn btn-primary">
+                    <i data-lucide="plus"></i> New Gesture
+                </a>
+            </header>
+
+            <div class="glass-card" style="padding: 0; overflow: hidden;">
+                <table style="width: 100%; border-collapse: collapse; text-align: left;">
+                    <thead>
+                        <tr style="background: rgba(255,255,255,0.02); border-bottom: 1px solid var(--card-border);">
+                            <th style="padding: 1rem 1.5rem; font-size: 0.85rem; color: #888;">GESTURE NAME</th>
+                            <th style="padding: 1rem 1.5rem; font-size: 0.85rem; color: #888;">TRIGGERED ACTION</th>
+                            <th style="padding: 1rem 1.5rem; font-size: 0.85rem; color: #888;">STATUS</th>
+                            <th style="padding: 1rem 1.5rem; font-size: 0.85rem; color: #888;">ACTIONS</th>
+                        </tr>
+                    </thead>
+                    <tbody id="gesture-list">
+                        <!-- Gesture rows will be injected here -->
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+
+    <!-- Edit Action Modal -->
+    <div id="action-modal"
+        style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(4px); z-index: 100; align-items: center; justify-content: center;">
+        <div class="glass-card" style="width: 400px; padding: 2rem;">
+            <h3>Update Action</h3>
+            <p style="margin-bottom: 1.5rem; font-size: 0.9rem;">Map <span id="target-gesture-name"></span> to a system
+                action.</p>
+
+            <div class="input-group">
+                <label>Select Action</label>
+                <select id="action-select" class="input-field" style="appearance: none;">
+                    <option value="play_pause">Play / Pause (Media)</option>
+                    <option value="next_slide">Next Slide (PPT)</option>
+                    <option value="prev_slide">Previous Slide (PPT)</option>
+                    <option value="volume_up">Volume Up</option>
+                    <option value="volume_down">Volume Down</option>
+                    <option value="scroll_up">Scroll Page Up</option>
+                    <option value="scroll_down">Scroll Page Down</option>
+                </select>
+            </div>
+
+            <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+                <button id="cancel-modal" class="btn btn-outline" style="flex: 1;">Cancel</button>
+                <button id="save-action" class="btn btn-primary" style="flex: 1;">Save Mapping</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import api from '../js/api.js';
+        lucide.createIcons();
+
+        const gestureList = document.getElementById('gesture-list');
+        const modal = document.getElementById('action-modal');
+        const actionSelect = document.getElementById('action-select');
+        let currentEditingGesture = null;
+
+        async function loadGestures() {
+            const gestures = await api.getGestures();
+
+            if (!gestures || gestures.error) {
+                gestureList.innerHTML = '<tr><td colspan="4" style="padding: 2rem; text-align: center; color: #888;">No gestures found. Train one in the Training tab!</td></tr>';
+                return;
+            }
+
+            gestureList.innerHTML = gestures.map(g => `
+                <tr style="border-bottom: 1px solid var(--card-border); transition: var(--transition); background: rgba(255,255,255,0.01);">
+                    <td style="padding: 1.25rem 1.5rem; font-weight: 500; color: #fff;">${g.name}</td>
+                    <td style="padding: 1.25rem 1.5rem;">
+                        <span style="background: rgba(0, 112, 243, 0.1); color: #0070f3; padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.8rem; font-weight: 600;">
+                            ${g.action || 'None'}
+                        </span>
+                    </td>
+                    <td style="padding: 1.25rem 1.5rem;">
+                        <div style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; color: #ccc;">
+                            <div style="width: 8px; height: 8px; border-radius: 50%; background: ${g.active ? '#00ff00' : '#888'};"></div>
+                            ${g.active ? 'Active' : 'Disabled'}
+                        </div>
+                    </td>
+                    <td style="padding: 1.25rem 1.5rem;">
+                        <button class="btn btn-outline" style="padding: 0.4rem 0.8rem; font-size: 0.8rem;" onclick="openEdit('${g.name}', '${g.action}')">
+                            <i data-lucide="edit-3" style="width: 14px; height: 14px;"></i> Edit
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+            lucide.createIcons();
+        }
+
+        window.openEdit = (name, currentAction) => {
+            currentEditingGesture = name;
+            document.getElementById('target-gesture-name').textContent = name;
+
+            // Auto-select current action if it exists
+            if (currentAction && currentAction !== 'None') {
+                actionSelect.value = currentAction;
+            } else {
+                actionSelect.selectedIndex = 0;
+            }
+
+            modal.style.display = 'flex';
+        };
+
+        document.getElementById('cancel-modal').onclick = () => modal.style.display = 'none';
+
+        document.getElementById('save-action').onclick = async () => {
+            const action = actionSelect.value;
+            const res = await api.mapAction({ gesture: currentEditingGesture, action });
+
+            if (res.success) {
+                modal.style.display = 'none';
+                await loadGestures();
+            } else {
+                alert('Failed to update mapping');
+            }
+        };
+
+        loadGestures();
+    </script>
+</body>
+
+</html>
