@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | Vision Assistant</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="gradient-bg"></div>
+
+    <div class="auth-container">
+        <div class="glass-card auth-card">
+            <h1>Vision Assistant</h1>
+            <p style="margin-bottom: 2rem;">Sign in to control your computer with gestures.</p>
+
+            <form id="login-form">
+                <div class="input-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" class="input-field" placeholder="name@example.com" required>
+                </div>
+
+                <div class="input-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" class="input-field" placeholder="••••••••" required>
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">
+                    Sign In
+                </button>
+            </form>
+
+            <p style="margin-top: 1.5rem; font-size: 0.9rem;">
+                Don't have an account? <a href="signup.html" style="color: var(--foreground); font-weight: 500;">Sign
+                    up</a>
+            </p>
+        </div>
+    </div>
+
+    <script type="module">
+        import api from '../js/api.js';
+
+        document.getElementById('login-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            // For demo purposes, we'll allow any login if backend isn't running
+            localStorage.setItem('user', JSON.stringify({ email }));
+            window.location.href = 'dashboard.html';
+        });
+    </script>
+</body>
+
+</html>
